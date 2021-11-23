@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 // import './App.css';
-import OrderLogin from './pages/orderLogin/OrderLogin';
+import OrderLogin from './pages/landingPage/OrderLogin';
 
 function App() {
   return (
