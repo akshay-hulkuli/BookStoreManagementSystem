@@ -1,0 +1,54 @@
+// @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Roboto:ital,wght@0,100;1,500&family=Zen+Kaku+Gothic+New:wght@300&display=swap');
+
+.root {
+    background: #A03037 0% 0% no-repeat padding-box;
+    opacity: 1;
+    padding : 10px 12% 8px 12%;
+    display: flex;
+}
+
+.header-text{
+    font: normal normal normal 26px Roboto;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    text-transform: capitalize;
+    opacity: 1;
+    margin: 10px 30px 0 10px;
+}
+
+.iconbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 30px;
+}
+
+.caption{
+    color: white;
+    margin-top: -5px;
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    width: auto;
+}
+
+.icons{
+    display: flex;
+}
+
+@media only screen and (max-width:'600px') {
+    .root{
+        flex-direction: column;
+        margin: auto;
+    }
+    .logo{
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .icons{
+        justify-content: center;
+        margin-top: 20px;
+    }
+}
