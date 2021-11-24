@@ -155,7 +155,6 @@ export default function SignUp() {
                     label="" 
                     variant="outlined" 
                     size="small" 
-                    color="error" 
                     sx={inputData.mobileError?{}:{marginBottom:'10px'}}
                     onChange ={(e)=>handleChange(e)}
                     helperText = {inputData.mobileError?"enter Correct data":""}
