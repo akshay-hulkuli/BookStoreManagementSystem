@@ -133,7 +133,7 @@ export default function Login() {
                     name="email" 
                     fullWidth 
                     error={inputData.emailError}
-                    helperText = {inputData.emailError?"Enter correct Email id": ""}
+                    helperText = {inputData.emailError?"Enter correct Email id": " "}
                     onChange={(e)=>handleChange(e)}
                 />
             </Box>
@@ -160,7 +160,7 @@ export default function Login() {
                     // helperText = {inputData.pswError?"this field can't be empty":""}
                     onChange={(e)=>handleChange(e)}
                 />
-                <FormHelperText error={inputData.pswError} sx={{paddingLeft:'15px'}}>{inputData.pswError?"this field can't be empty":""}</FormHelperText>
+                <FormHelperText error={inputData.pswError} sx={{paddingLeft:'15px'}}>{inputData.pswError?"this field can't be empty":" "}</FormHelperText>
             </Box>
             <CustomButton variant="contained" fullWidth size="medium" onClick={submitForm}>Login</CustomButton>
             <Divider sx={{margin:'30px'}}>OR</Divider>
