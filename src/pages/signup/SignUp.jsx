@@ -111,9 +111,8 @@ export default function SignUp() {
                     variant="outlined" 
                     size="small" 
                     error= {inputData.nameError} 
-                    sx={inputData.nameError?{}:{marginBottom:'10px'}}
                     onChange ={(e)=>handleChange(e)}
-                    helperText = {inputData.nameError?"this is can't be empty":""}
+                    helperText = {inputData.nameError?"this is can't be empty":" "}
                 />
                 <InputLabel sx={{color:'black',fontSize:'15px'}}>Email Id</InputLabel>
                 <TextField 
@@ -122,9 +121,8 @@ export default function SignUp() {
                     variant="outlined" 
                     size="small"  
                     error= {inputData.emailError}
-                    sx={inputData.emailError?{marginBottom:'0px'}:{marginBottom:'10px'}}
                     onChange ={(e)=>handleChange(e)}
-                    helperText = {inputData.emailError?"Enter correct data":""}
+                    helperText = {inputData.emailError?"Enter correct data":" "}
                 />
                 <InputLabel sx={{color:'black',fontSize:'15px'}}>Password</InputLabel>
                 <OutlinedInput 
@@ -145,19 +143,17 @@ export default function SignUp() {
                         </IconButton>
                       </InputAdornment>
                     }
-                    sx={inputData.pswError?{}:{marginBottom:'10px'}}
                     onChange ={(e)=>handleChange(e)}
                 />
-                <FormHelperText error= {inputData.pswError} sx={{marginLeft:'15px'}} >{inputData.pswError?"this field can't be empty":""}</FormHelperText>
+                <FormHelperText error= {inputData.pswError} sx={{marginLeft:'15px'}} >{inputData.pswError?"this field can't be empty":" "}</FormHelperText>
                 <InputLabel sx={{color:'black',fontSize:'15px'}}>Mobile Number</InputLabel>
                 <TextField 
                     name="mobile" 
                     label="" 
                     variant="outlined" 
                     size="small" 
-                    sx={inputData.mobileError?{}:{marginBottom:'10px'}}
                     onChange ={(e)=>handleChange(e)}
-                    helperText = {inputData.mobileError?"enter Correct data":""}
+                    helperText = {inputData.mobileError?"enter Correct data":" "}
                     error= {inputData.mobileError}
                 />
                 <CustomButton variant="contained" fullWidth size="medium" onClick={submitForm}>SignUp</CustomButton>
