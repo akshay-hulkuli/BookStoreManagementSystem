@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import UserService from '../../services/UserService';
+import {useNavigate} from 'react-router-dom';
 
 const userService = new UserService();
 
@@ -59,6 +60,7 @@ export default function Login() {
         "psw": "",
         "pswError": false
     });
+    const navigate = useNavigate();
     const setColor = (id) => {
         document.getElementById(id).style.color = 'red';
     } 
@@ -110,6 +112,8 @@ export default function Login() {
                 .then((a)=>{
                     console.log("successfully logged in");
                     console.log(a);
+                    localStorage.setItem('accessToken',a.data.result.accessToken);
+                    navigate('/dashboard');
                 })
                 .catch((err)=>{
                     console.log(err);
