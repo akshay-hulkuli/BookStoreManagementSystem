@@ -70,16 +70,7 @@ export default function Dashboard() {
     let currentBooks = bookData.slice(indexOfFirstTodo, indexOfLastTodo);
 
     async function getCart ()  {
-        console.log(localStorage.getItem('accessToken'))
-        await bookService.getCartItems('bookstore_user/get_cart_items')
-            .then((res)=>{
-                console.log(res);
-                dispatch(initialiseCart(res.data.result));
-                
-            })
-            .catch((err)=>{
-                console.log(err);
-            })
+       dispatch(initialiseCart())
     }
 
     const getData = () => {
@@ -116,7 +107,7 @@ export default function Dashboard() {
 
     const buttons = (book) => {
         // console.log(cartData, book._id);
-        if(!DoesCartHave(book)){
+        if(!cartData.includes(book._id)){
             return (
                 <div className="buttons">
                     <CustomButton onClick={()=>addToBag(book)}>Add to bag</CustomButton>
@@ -139,17 +130,8 @@ export default function Dashboard() {
         }
     }
 
-    const DoesCartHave = (book) => {
-        var flag = false;
-        cartData.map((cur) => {
-            if(cur.product_id._id === book._id)
-            flag = true;
-        })
-        return flag;
-    }
-
     function addToBag(book) {
-        dispatch(addToCart(book,getCart));
+        dispatch(addToCart(book,getCart()));
     }
 
     return (
