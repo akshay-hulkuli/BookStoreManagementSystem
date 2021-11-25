@@ -19,8 +19,13 @@ class BookService {
         return axiosService.GetMeth(url,config)
     }
 
-    getCartItems (url){
-        return axiosService.GetMeth(url,config1)
+    getCartItems (url,token){
+        const config2 = {
+            headers:{
+                "token" : token,
+            }
+        }
+        return axiosService.GetMeth(url,config2)
     }
 
     addBookToCart(url,data){
