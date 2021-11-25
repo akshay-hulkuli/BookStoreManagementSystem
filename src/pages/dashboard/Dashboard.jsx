@@ -3,7 +3,7 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import './dashboard.scss'
 import MenuItem from '@mui/material/MenuItem';
-import {FormControl,Box,IconButton, Grid, Button, Stack,PaginationItem} from '@mui/material';
+import {FormControl,Box,IconButton, Grid, Button, Stack,PaginationItem, getCardUtilityClass} from '@mui/material';
 import Select from '@mui/material/Select';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import BookService from '../../services/BookServices';
@@ -13,7 +13,8 @@ import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-
+import {useDispatch,useSelector} from 'react-redux';
+import { addToCart,removeFromCart, initialiseCart } from '../../actions';
 
 const theme = createTheme({
   palette: {
@@ -62,10 +63,24 @@ export default function Dashboard() {
     const [bookData, setBookData] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(1);
     const booksPerPage = 8;
-
+    const dispatch = useDispatch();
+    const cartData = useSelector(state => state);
     let indexOfLastTodo = currentPage * booksPerPage;
     let indexOfFirstTodo = indexOfLastTodo - booksPerPage;
     let currentBooks = bookData.slice(indexOfFirstTodo, indexOfLastTodo);
+
+    async function getCart ()  {
+        console.log(localStorage.getItem('accessToken'))
+        await bookService.getCartItems('bookstore_user/get_cart_items')
+            .then((res)=>{
+                console.log(res);
+                dispatch(initialiseCart(res.data.result));
+                
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+    }
 
     const getData = () => {
         bookService.getBooks('bookstore_user/get/book')
@@ -86,14 +101,56 @@ export default function Dashboard() {
     };
 
     React.useEffect(()=>{
-        getData();
+        getCart();
     },[])
+
+    React.useEffect(()=>{
+        console.log("redux state change")
+        console.log(cartData)
+        getData();
+    },[cartData])
 
     const handleChange = (event) => {
         setSortingFilter(event.target.value);
     };
 
-    
+    const buttons = (book) => {
+        // console.log(cartData, book._id);
+        if(!DoesCartHave(book)){
+            return (
+                <div className="buttons">
+                    <CustomButton onClick={()=>addToBag(book)}>Add to bag</CustomButton>
+                    <CustomButton
+                        sx={{background:'white', '&:hover':{background:'white'}, color:'black'}}
+                    > wishlist
+                    </CustomButton>
+                </div>
+            );
+        }
+        else{
+            return (
+                <div className="buttons">
+                    <CustomButton
+                            sx={{background:'#3371B5', '&:hover':{background:'#3371B5'}, color:'white', width:'100%'}}
+                    > Added to cart
+                    </CustomButton>
+                </div>
+            );
+        }
+    }
+
+    const DoesCartHave = (book) => {
+        var flag = false;
+        cartData.map((cur) => {
+            if(cur.product_id._id === book._id)
+            flag = true;
+        })
+        return flag;
+    }
+
+    function addToBag(book) {
+        dispatch(addToCart(book,getCart));
+    }
 
     return (
         <div>
@@ -128,26 +185,21 @@ export default function Dashboard() {
                     </div>
                 </div>
                 <Grid container spacing={4}>
-                    {currentBooks.map((book)=>(
-                        <Grid item xs={12} sm={6} md={4} lg={3}>
-                        <div className='card'>
-                            <div className="card-media">
-                                <img src={image} className="image"/>
+                    {currentBooks.map((book,index)=>(
+                        <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                            <div className='card'>
+                                <div className="card-media">
+                                    <img src={image} className="image"/>
+                                </div>
+                                <div className="book-details">
+                                    <div className="book-name">{book.bookName}</div>
+                                    <div className="book-author">by {book.author}</div>
+                                    <div className="book-price">Rs. {book.price}</div>
+                                </div>
+                                {buttons(book)}
+                                {/* {console.log(cartData)} */}
                             </div>
-                            <div className="book-details">
-                                <div className="book-name">{book.bookName}</div>
-                                <div className="book-author">by {book.author}</div>
-                                <div className="book-price">Rs. {book.price}</div>
-                            </div>
-                            <div className="buttons">
-                                <CustomButton>Add to bag</CustomButton>
-                                <CustomButton
-                                 sx={{background:'white', '&:hover':{background:'white'}, color:'black'}}
-                                > wishlist
-                                </CustomButton>
-                            </div>
-                        </div>
-                    </Grid>
+                        </Grid>
                     ))}
                 </Grid>
                 <ThemeProvider theme={theme}>
