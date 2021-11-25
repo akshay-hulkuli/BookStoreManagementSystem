@@ -1,12 +1,15 @@
 import React from 'react'
 import icon from '../../assets/education.svg'
 import './header.scss'
-import { OutlinedInput, InputAdornment,IconButton, Box,Divider } from '@mui/material';
+import { OutlinedInput, InputAdornment,IconButton, Box,Divider,Badge } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import {useSelector} from 'react-redux';
+import { red } from '@mui/material/colors';
 
 export default function Header() {
+    const state  = useSelector(state => state);
     return (
         <div class="root">
             <div className="logo">
@@ -28,7 +31,7 @@ export default function Header() {
                 </div>
                 <Divider orientation="vertical" flexItem />
                 <div className="iconbox">
-                    <IconButton sx={{color:'white'}}><ShoppingCartOutlinedIcon/></IconButton>
+                    <IconButton sx={{color:'white'}}><Badge badgeContent={state.length} color="info"><ShoppingCartOutlinedIcon/></Badge></IconButton>
                     <div className="caption">cart</div>
                 </div>
                 <Divider orientation="vertical" flexItem />
