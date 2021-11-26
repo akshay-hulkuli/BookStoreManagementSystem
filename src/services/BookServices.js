@@ -31,6 +31,19 @@ class BookService {
     addBookToCart(url,data){
         return axiosService.PostMeth(url,data,config1);
     }
+
+    getWishList(url,token){
+        const config2 = {
+            headers:{
+                "token" : token,
+            }
+        }
+        return axiosService.GetMeth(url,config2)
+    } 
+
+    addToWishList(url,data){
+        return axiosService.PostMeth(url,data,config1);
+    }
 }
 
 export default BookService;
