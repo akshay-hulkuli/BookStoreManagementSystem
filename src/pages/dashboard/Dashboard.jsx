@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import {useDispatch,useSelector} from 'react-redux';
-import { addToCart,removeFromCart, initialiseCart } from '../../actions';
+import { addToCart,removeFromCart, initialiseCart, addToWishList, initializeWishList } from '../../actions';
 
 const theme = createTheme({
   palette: {
@@ -62,6 +62,7 @@ export default function Dashboard() {
     const [sortingFilter, setSortingFilter] = React.useState(-1);
     const [bookData, setBookData] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(1);
+    const [wishlist, setWishlist] = React.useState([]);
     const booksPerPage = 8;
     const dispatch = useDispatch();
     const cartData = useSelector(state => state);
@@ -84,6 +85,21 @@ export default function Dashboard() {
             })
     }
 
+    const getWishList = () => {
+        bookService.getWishList('bookstore_user/get_wishlist_items',localStorage.getItem('accessToken'))
+            .then ((res) => {
+                console.log(res);
+                let ids = [];
+                res.data.result.map(cur => {
+                    ids.push(cur.product_id._id)
+                })
+                setWishlist(ids);
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+    }
+
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
         indexOfLastTodo = currentPage * booksPerPage;
@@ -93,6 +109,7 @@ export default function Dashboard() {
 
     React.useEffect(()=>{
         getCart();
+        getWishList();
     },[])
 
     React.useEffect(()=>{
@@ -101,24 +118,17 @@ export default function Dashboard() {
         getData();
     },[cartData])
 
+    React.useEffect(()=>{
+        getData();
+    },[wishlist])
+
     const handleChange = (event) => {
         setSortingFilter(event.target.value);
     };
 
     const buttons = (book) => {
         // console.log(cartData, book._id);
-        if(!cartData.includes(book._id)){
-            return (
-                <div className="buttons">
-                    <CustomButton onClick={()=>addToBag(book)}>Add to bag</CustomButton>
-                    <CustomButton
-                        sx={{background:'white', '&:hover':{background:'white'}, color:'black'}}
-                    > wishlist
-                    </CustomButton>
-                </div>
-            );
-        }
-        else{
+        if(cartData.includes(book._id)){
             return (
                 <div className="buttons">
                     <CustomButton
@@ -128,10 +138,47 @@ export default function Dashboard() {
                 </div>
             );
         }
+        else if (wishlist.includes(book._id)){
+            return (
+                <div className="buttons">
+                    <CustomButton
+                            sx={{background:'white', '&:hover':{background:'white'}, color:'black', width:'100%'}}
+                    > Added to wishlist
+                    </CustomButton>
+                </div>
+            );
+        }
+        else{
+            return (
+                <div className="buttons">
+                    <CustomButton onClick={()=>addToBag(book)}>Add to bag</CustomButton>
+                    <CustomButton
+                        sx={{background:'white', '&:hover':{background:'white'}, color:'black'}}
+                        onClick = {()=>addToWishList(book)}
+                    > wishlist
+                    </CustomButton>
+                </div>
+            );
+        }
     }
 
     function addToBag(book) {
         dispatch(addToCart(book,getCart()));
+    }
+
+    const addToWishList = (book) => {
+        const payload = {
+            "product_id": book._id
+        }
+        var url = `bookstore_user/add_wish_list/${book._id}`;
+        bookService.addToWishList(url,payload)
+            .then((res)=>{
+                console.log("added to wish list");
+                setWishlist(wishlist => wishlist.concat(book._id));
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
     }
 
     return (
