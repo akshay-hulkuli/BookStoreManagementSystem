@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import OrderLogin from './pages/landingPage/OrderLogin';
 import {Routes,BrowserRouter as Router,Route} from 'react-router-dom';
 import Dashboard from './pages/dashboard/Dashboard';
+import CartPage from './pages/CartPage/CartPage';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route exact path="/"  element={<OrderLogin/>}/>
           <Route exact path="/dashboard" element={<Dashboard/>}/>
+          <Route exact path="/cart" element={<CartPage/>}/>
         </Routes>
       </Router>
     </div>
