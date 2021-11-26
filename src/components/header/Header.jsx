@@ -7,9 +7,11 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import {useSelector} from 'react-redux';
 import { red } from '@mui/material/colors';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
     const state  = useSelector(state => state);
+    const navigate  = useNavigate();
     return (
         <div class="root">
             <div className="logo">
@@ -30,7 +32,7 @@ export default function Header() {
                     <div className="caption">account</div>
                 </div>
                 <Divider orientation="vertical" flexItem />
-                <div className="iconbox">
+                <div className="iconbox" onClick={()=>navigate('/cart')}>
                     <IconButton sx={{color:'white'}}><Badge badgeContent={state.length} color="info"><ShoppingCartOutlinedIcon/></Badge></IconButton>
                     <div className="caption">cart</div>
                 </div>
