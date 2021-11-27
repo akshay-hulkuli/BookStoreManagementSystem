@@ -24,10 +24,21 @@ export const addToCart = (data,getCart) => async dispatch => {
 
 }
 
-export const removeFromCart = (data) => {
-    return {
-        type: "REMOVEFROMCART",
-        payload: data
+export const removeFromCart = (id,data) => async dispatch => {
+    try{
+        const payload = {
+                      "cartItem_id": id
+                 }
+        const url = `bookstore_user/remove_cart_item/${id}`
+        await bookService.deleteFromCart(url,payload);
+        console.log(localStorage.getItem('accessToken'))
+        dispatch( {
+            type: "REMOVEFROMCART",
+            payload: data
+        })
+    }
+    catch(e){
+        console.log(e);
     }
 }
 

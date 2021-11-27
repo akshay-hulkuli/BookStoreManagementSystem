@@ -44,6 +44,10 @@ class BookService {
     addToWishList(url,data){
         return axiosService.PostMeth(url,data,config1);
     }
+
+    deleteFromCart (url,data){
+        return axiosService.DeleteMeth(url,data,config1);
+    }
 }
 
 export default BookService;
