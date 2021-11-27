@@ -7,6 +7,11 @@ import {Box, padding, styled} from '@mui/system'
 import image from '../../assets/Image 23.png'
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import BookService from '../../services/BookServices'
+import {useDispatch,useSelector} from 'react-redux';
+import { removeFromCart, initialiseCart, addToWishList, initializeWishList } from '../../actions';
+
+const bookService  = new BookService();
 
 const CustomButton = styled(Button) (({theme}) => ({
     background:'#3371B5',
@@ -25,6 +30,30 @@ export default function CartPage() {
     const [counter, setCounter] = React.useState(1);
     const[openCollapse, setOpenCollapse] = React.useState(false);
     const[openCollapse2, setOpenCollapse2] = React.useState(false);
+    const [cartData, setCartData] = React.useState([]);
+
+    const dispatch = useDispatch();
+    const cartState = useSelector(state => state);
+
+    const getCartData = () => {
+        bookService.getCartItems('bookstore_user/get_cart_items',localStorage.getItem('accessToken'))
+            .then((res)=> {
+                console.log(res);
+                setCartData(res.data.result);
+            })
+    }
+
+    React.useEffect(()=>{
+        getCartData();
+    },[])
+
+    React.useEffect(()=>{
+        getCartData();
+    },[cartState])
+
+    const removeCart = (book) => {
+        dispatch(removeFromCart(book._id,book.product_id._id));
+    }
 
     const handleCollapse = () => {
         setOpenCollapse(!openCollapse);
@@ -61,47 +90,50 @@ export default function CartPage() {
                         </p>
 
                         {/* this is the book iterate it */}
-                        <div className="my-book">
-                            <div className="my-book-left">
-                                <img src = {image} className="my-book-left-image"/>
-                            </div> 
-                            <div className="my-book-right">
-                                <div className="my-book-details">
-                                    <div className="my-book-name">Don't make me think</div>
-                                    <div className="my-book-author">by steve krug</div>
-                                    <div className="my-book-cost">Rs. 1500</div>
-                                </div>
-                                <div className="my-book-handler">
-                                    <div className="counter">
-                                        <IconButton
-                                            sx={{background: '#FAFAFA 0% 0% no-repeat paddingBox',
-                                            border: '1px solid #DBDBDB',
-                                            }}
-                                            onClick={onCounterUp}
-                                        >
-                                                <AddIcon/>
-                                        </IconButton>
-                                        <TextField
-                                            variant='outlined'
-                                            size="small"
-                                            sx={{width:"40px",margin:'0 10px'}}
-                                            value={counter}
-                                        />
-                                        <IconButton
-                                            sx={{background: '#FAFAFA 0% 0% no-repeat paddingBox',
-                                            border: '1px solid #DBDBDB'}}
-                                            onClick={onCounterDown}
-                                        >
-                                                <RemoveIcon/>
-                                        </IconButton>
+                        {cartData.map((book)=>(
+                            <div className="my-book">
+                                <div className="my-book-left">
+                                    <img src = {image} className="my-book-left-image"/>
+                                </div> 
+                                <div className="my-book-right">
+                                    <div className="my-book-details">
+                                        <div className="my-book-name">{book.product_id.bookName}</div>
+                                        <div className="my-book-author">{book.product_id.author}</div>
+                                        <div className="my-book-cost">Rs. {book.product_id.price}</div>
                                     </div>
-                                    <div style={{height:'40px', marginLeft: '20px'}}>
-                                        <Button>remove</Button>
+                                    <div className="my-book-handler">
+                                        <div className="counter">
+                                            <IconButton
+                                                sx={{background: '#FAFAFA 0% 0% no-repeat paddingBox',
+                                                border: '1px solid #DBDBDB',
+                                                }}
+                                                onClick={onCounterUp}
+                                            >
+                                                    <AddIcon/>
+                                            </IconButton>
+                                            <TextField
+                                                variant='outlined'
+                                                size="small"
+                                                sx={{width:"40px",margin:'0 10px'}}
+                                                value={counter}
+                                            />
+                                            <IconButton
+                                                sx={{background: '#FAFAFA 0% 0% no-repeat paddingBox',
+                                                border: '1px solid #DBDBDB'}}
+                                                onClick={onCounterDown}
+                                            >
+                                                    <RemoveIcon/>
+                                            </IconButton>
+                                        </div>
+                                        <div style={{height:'40px', marginLeft: '20px'}}>
+                                            <Button onClick={()=>removeCart(book)}>remove</Button>
+                                        </div>
+                                        
                                     </div>
-                                    
-                                </div>
-                            </div> 
-                        </div>
+                                </div> 
+                            </div>
+                        ))}
+                       
                     </div>
                     <div className="my-cart-right">
                         <Fade in={!openCollapse}>
@@ -188,8 +220,8 @@ export default function CartPage() {
                                         type
                                     </span>
                                     <RadioGroup row aria-label="gender" name="row-radio-buttons-group" sx={{color:'#9D9D9D'}} >
-                                        <FormControlLabel value="female" control={<Radio />} label="Female" sx={{paddingRight:'100px'}} disabled={openCollapse2}/>
-                                        <FormControlLabel value="male" control={<Radio />} label="Male" sx={{paddingRight:'100px'}} disabled={openCollapse2} />
+                                        <FormControlLabel value="female" control={<Radio />} label="Home" sx={{paddingRight:'100px'}} disabled={openCollapse2}/>
+                                        <FormControlLabel value="male" control={<Radio />} label="Work" sx={{paddingRight:'100px'}} disabled={openCollapse2} />
                                         <FormControlLabel value="other" control={<Radio />} label="Other"disabled={openCollapse2} />
                                     </RadioGroup>
                                
@@ -213,21 +245,24 @@ export default function CartPage() {
                         <div className="order-summary">
                             <div className = "my-cart-left">
                                 {/* this is the book iterate it */}
-                                <div className="my-book">
-                                    <div className="my-book-left">
-                                        <img src = {image} className="my-book-left-image"/>
-                                    </div> 
-                                    <div className="my-book-right">
-                                        <div className="my-book-details">
-                                            <div className="my-book-name">Don't make me think</div>
-                                            <div className="my-book-author">by steve krug</div>
-                                            <div className="my-book-cost">Rs. 1500</div>
-                                        </div>
-                                        <div>
-                                            <br></br><br></br><br></br><br></br>
-                                        </div>
-                                    </div> 
-                                </div>
+                                {cartData.map((book)=>(
+                                    <div className="my-book">
+                                        <div className="my-book-left">
+                                            <img src = {image} className="my-book-left-image"/>
+                                        </div> 
+                                        <div className="my-book-right">
+                                            <div className="my-book-details">
+                                                <div className="my-book-name">{book.product_id.bookName}</div>
+                                                <div className="my-book-author">{book.product_id.author} </div>
+                                                <div className="my-book-cost">Rs. {book.product_id.price}</div>
+                                            </div>
+                                            <div>
+                                                <br></br><br></br><br></br><br></br>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                ))}
+                                
                             </div>
                             <div className="my-cart-right">
                                 <CustomButton onClick={handleCollapse}>checkout</CustomButton>
