@@ -4,6 +4,7 @@ import OrderLogin from './pages/landingPage/OrderLogin';
 import {Routes,BrowserRouter as Router,Route} from 'react-router-dom';
 import Dashboard from './pages/dashboard/Dashboard';
 import CartPage from './pages/CartPage/CartPage';
+import ProtectedRoute from './protectedRoute/ProtectedRoute';
 
 function App() {
   return (
@@ -11,8 +12,20 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/"  element={<OrderLogin/>}/>
-          <Route exact path="/dashboard" element={<Dashboard/>}/>
-          <Route exact path="/cart" element={<CartPage/>}/>
+          <Route 
+            exact 
+            path="/dashboard" 
+            element={<ProtectedRoute>
+                      <Dashboard/>
+                    </ProtectedRoute>}
+          />
+          <Route 
+            exact 
+            path="/cart" 
+            element={<ProtectedRoute>
+                      <CartPage/>
+                    </ProtectedRoute>}
+          />
         </Routes>
       </Router>
     </div>
