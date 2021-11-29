@@ -11,8 +11,10 @@ import BookService from '../../services/BookServices'
 import {useDispatch,useSelector} from 'react-redux';
 import { removeFromCart, initialiseCart, addToWishList, initializeWishList,initialiseCartWithoutApi } from '../../actions';
 import CartItem from '../../components/cartItem/CartItem'
+import UserService from '../../services/UserService'
 
 const bookService  = new BookService();
+const userService = new UserService();
 
 const CustomButton = styled(Button) (({theme}) => ({
     background:'#3371B5',
@@ -33,6 +35,90 @@ export default function CartPage() {
     const [cartData, setCartData] = React.useState([]);
     const dispatch = useDispatch();
     // const cartState = useSelector(state => state);
+    const [formData, setFormData] = React.useState({
+        "name":"",
+        "nameError": false,
+        "phone": "",
+        "phoneError": false,
+        "pincode":"",
+        "pincodeError": false,
+        "state": "",
+        "stateError": false,
+        "address": "",
+        "addressError": false,
+        "city":"",
+        "cityError": false,
+        "landmark":"",
+        "landmarkError": false,
+        "type":"",
+        "typeError": false,
+    });
+
+    const handleFormInputChange = (e) => {
+        var tempFormData = formData;
+        switch(e.target.name){
+            case 'name': tempFormData.name = e.target.value;
+                          break;
+            case 'phone' : tempFormData.phone = e.target.value;
+                         break;
+            case 'pincode' : tempFormData.pincode = e.target.value;
+                         break;
+            case 'state' : tempFormData.state = e.target.value;
+                         break;
+            case 'address' : tempFormData.address = e.target.value;
+                         break;
+            case 'city' : tempFormData.city = e.target.value;
+                         break;
+            case 'landmark' : tempFormData.landmark = e.target.value;
+                         break;
+            case 'type' : tempFormData.type = e.target.value;
+                         break;
+        }
+        setFormData({...formData,tempFormData});
+        // console.log(formData)
+    }
+
+    const isValid = () => {
+        var error = false;
+        var data = formData;
+
+        data.nameError = (data.name !== "") ? false : true;
+        data.phoneError = (data.phone !== "") ? false : true;
+        data.pincodeError = (data.pincode !== "") ? false : true;
+        data.stateError = (data.state !== "") ? false : true;
+        data.addressError = (data.address !== "") ? false : true;
+        data.cityError = (data.city !== "") ? false : true;
+        data.landmarkError = (data.landmark !== "") ? false : true;
+        data.typeError = (data.type != "") ? false: true;
+
+        setFormData({...formData, data});
+        console.log(formData);
+        error = (data.nameError || data.phoneError || data.pincodeError || data.stateError || data.addressError || data.cityError || data.landmarkError || data.typeError);
+        return error;
+    }
+
+    const submitForm = () => {
+        if(!isValid()){
+            console.log("validation successfull");
+            var data = {
+                'addressType': formData.type,
+                'fullAddress': formData.address,
+                'city': formData.city,
+                'state': formData.state
+            }
+            userService.addCustomerAddress('bookstore_user/edit_user',data)
+                .then((a)=>{
+                    setOpenCollapse2(!openCollapse2);
+
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+        }
+        else {
+            console.log("validation failed");
+        }
+    }
 
     const getCartData = () => {
         bookService.getCartItems('bookstore_user/get_cart_items',localStorage.getItem('accessToken'))
@@ -52,10 +138,6 @@ export default function CartPage() {
         setOpenCollapse(!openCollapse);
     }
 
-    const handleCollapse2 = () => {
-        setOpenCollapse2(!openCollapse2);
-    }
-
     const allowEdit = () => {
         setOpenCollapse2(false)
     }
@@ -63,6 +145,29 @@ export default function CartPage() {
     const backToCart = () => {
         setOpenCollapse(false);
         setOpenCollapse2(false)
+    }
+
+    const placeOrder = () => {
+        var orders  = [];
+        cartData.map((order)=>{
+            orders.push({
+                "product_id":order.product_id._id,
+                "product_name": order.product_id.bookName,
+                "product_quantity":order.quantityToBuy,
+                "product_price":order.product_id.price
+            })
+        })
+        console.log(orders)
+        var data ={
+            "orders": orders
+        }
+        bookService.placeOrder('bookstore_user/add/order',data)
+            .then(()=>{
+                alert('your order is successfully placed');
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
     }
 
     return (
@@ -105,6 +210,10 @@ export default function CartPage() {
                                         fullWidth
                                         size="medium"
                                         disabled={openCollapse2}
+                                        name="name"
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                        error={formData.nameError}
+                                        helperText = {formData.nameError? "this is a required field":" "}
                                     />
                                     <TextField
                                         variant="outlined"
@@ -113,6 +222,10 @@ export default function CartPage() {
                                         fullWidth
                                         size="medium"
                                         disabled={openCollapse2}
+                                        name="phone"
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                        error={formData.phoneError}
+                                        helperText = {formData.phoneError? "this is a required field":" "}
                                     />
                                 </div>
                                 <div className="textfield-box">
@@ -123,14 +236,22 @@ export default function CartPage() {
                                         fullWidth
                                         size="medium"
                                         disabled={openCollapse2}
+                                        name="pincode"
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                        error={formData.pincodeError}
+                                        helperText = {formData.pincodeError? "this is a required field":" "}
                                     />
                                     <TextField
                                         variant="outlined"
-                                        placeholder="Locality"
+                                        placeholder="State"
                                         sx={{margin: '5px'}}
                                         fullWidth
                                         size="medium"
                                         disabled={openCollapse2}
+                                        name="state"
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                        error={formData.stateError}
+                                        helperText = {formData.stateError? "this is a required field":" "}
                                     />
                                 </div>
                                 <div className="textfield-box">
@@ -142,6 +263,10 @@ export default function CartPage() {
                                         sx={{margin: '5px'}}
                                         fullWidth
                                         disabled={openCollapse2}
+                                        name="address"
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                        error={formData.addressError}
+                                        helperText = {formData.addressError? "this is a required field":" "}
                                     />
                                 </div>
                                 <div className="textfield-box">
@@ -152,6 +277,10 @@ export default function CartPage() {
                                         fullWidth
                                         size="medium"
                                         disabled={openCollapse2}
+                                        name="city"
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                        error={formData.cityError}
+                                        helperText = {formData.cityError? "this is a required field":" "}
                                     />
                                     <TextField
                                         variant="outlined"
@@ -160,23 +289,32 @@ export default function CartPage() {
                                         fullWidth
                                         size="medium"
                                         disabled={openCollapse2}
+                                        name="landmark"
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                        error={formData.landmarkError}
+                                        helperText = {formData.landmarkError? "this is a required field":" "}
                                     />
                                 </div>
                                 <div style={{margin:'30px 10px'}}>
                                     <span className="customer-details-radio-header">
                                         type
                                     </span>
-                                    <RadioGroup row aria-label="gender" name="row-radio-buttons-group" sx={{color:'#9D9D9D'}} >
-                                        <FormControlLabel value="female" control={<Radio />} label="Home" sx={{paddingRight:'100px'}} disabled={openCollapse2}/>
-                                        <FormControlLabel value="male" control={<Radio />} label="Work" sx={{paddingRight:'100px'}} disabled={openCollapse2} />
-                                        <FormControlLabel value="other" control={<Radio />} label="Other"disabled={openCollapse2} />
+                                    <RadioGroup 
+                                        row aria-label="gender" 
+                                        name="row-radio-buttons-group" 
+                                        sx={{color:'#9D9D9D'}} 
+                                        onChange={(e)=>handleFormInputChange(e)}
+                                    >
+                                        <FormControlLabel name="type" value="Home" control={<Radio />} label="Home" sx={{paddingRight:'100px'}} disabled={openCollapse2}/>
+                                        <FormControlLabel name="type" value="Office" control={<Radio />} label="Work" sx={{paddingRight:'100px'}} disabled={openCollapse2} />
+                                        <FormControlLabel name="type" value="Other" control={<Radio />} label="Other"disabled={openCollapse2} />
                                     </RadioGroup>
                                
                                 </div>
                             </div>
                             <div className="collapse-main-right">
                                 <Fade in={!openCollapse2}>
-                                    <CustomButton onClick={handleCollapse2}>continue</CustomButton>
+                                    <CustomButton onClick={submitForm}>continue</CustomButton>
                                 </Fade>
                             </div>
                         </div>
@@ -212,7 +350,7 @@ export default function CartPage() {
                                 
                             </div>
                             <div className="my-cart-right">
-                                <CustomButton onClick={handleCollapse}>checkout</CustomButton>
+                                <CustomButton onClick={placeOrder}>checkout</CustomButton>
                             </div>
                         </div>
                     </Collapse>
