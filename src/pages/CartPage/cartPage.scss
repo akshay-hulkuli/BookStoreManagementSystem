@@ -152,3 +152,42 @@
     display: flex;
     justify-content: space-between;
 }
+
+@media only screen and (max-width:500px) {
+    .cart-main{
+        padding: 20px;
+    }
+    .my-cart{
+        margin-right: 0px;
+        display: flex;
+        flex-direction: column;
+    }
+    .my-book{
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+    .my-book-left{
+        padding-left: 0;
+    }
+    .my-book-right{
+        margin: 0%;
+    }
+    .customer-details{
+        margin: 0;
+        flex-direction: column;
+    }
+    .collapse-main{
+        flex-direction: column;
+        padding: 10px;
+    }
+    .collapse-main-left{
+        padding: 0%;
+    }
+    .textfield-box{
+        flex-wrap: wrap;
+    }
+    .order-summary{
+        flex-direction: column;
+    }
+}
