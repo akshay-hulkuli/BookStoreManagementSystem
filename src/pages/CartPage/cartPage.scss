@@ -153,41 +153,126 @@
     justify-content: space-between;
 }
 
-@media only screen and (max-width:500px) {
+@media only screen and (max-width:'600px') {
     .cart-main{
         padding: 20px;
+        .my-cart{
+            margin-right: 0px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            .my-book{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 10px 0;
+            }
+            .my-book-left{
+                padding-left: 0;
+                margin: 0 auto;
+                .my-book-left-image{
+                    margin: 0;
+                }
+            }
+            .my-cart-left-header{
+                margin: 15px 0;
+            }
+            
+            .my-book-right{
+                margin: auto;
+                .my-book-details{
+                    text-align: center;
+                }
+                .my-book-handler{
+                    padding: 15px 0;
+                }
+            }
+            .my-cart-right{
+                margin: 0;
+                margin-left: auto;
+            }
+        }
+
+        .customer-details{
+            margin: 0;
+            margin-top: 20px;
+            flex-direction: column;
+            .collapse-main{
+                flex-direction: column;
+                padding: 10px;
+            }
+            .collapse-main-left{
+                padding: 0%;
+            }
+            .textfield-box{
+                flex-wrap: wrap;
+            }
+            .collapse-main-right{
+                margin-left: auto;
+            }
+        }
+        
+        .order-summary{
+            flex-direction: column;
+            .empty{
+                display: none;
+            }
+            .my-book-details{
+                justify-content: center;
+            }
+            .my-cart-left{
+                padding: 0 10px;
+            }
+            .my-cart-right{
+                margin-left: auto;
+            }
+        }
     }
+    
+}
+
+@media only screen and (max-width:'1300px') {
     .my-cart{
-        margin-right: 0px;
-        display: flex;
-        flex-direction: column;
-    }
-    .my-book{
-        display: flex;
-        flex-direction: column;
-        padding: 0;
-    }
-    .my-book-left{
-        padding-left: 0;
-    }
-    .my-book-right{
-        margin: 0%;
+        margin-right: 0;
     }
     .customer-details{
-        margin: 0;
+        margin-right: 0;
+    }
+    .order-summary{
+        margin-right: 0%;
+    }
+}
+
+@media only screen and (max-width:'1024px') {
+    .cart-main{
+        padding: 2% 5%;
+    }
+}
+
+@media only screen and (max-width:'800px') {
+    .my-cart{
         flex-direction: column;
+        .my-book{
+            margin: auto;
+        }
+        .my-cart-right{
+            margin-left: auto;
+        }
     }
     .collapse-main{
         flex-direction: column;
-        padding: 10px;
+        .collapse-main-right{
+            margin-left: auto;
+        }
     }
-    .collapse-main-left{
-        padding: 0%;
-    }
-    .textfield-box{
-        flex-wrap: wrap;
-    }
+
     .order-summary{
         flex-direction: column;
+        .my-book{
+            margin: auto;
+        }
+        .my-cart-right{
+            margin-left: auto;
+        }
     }
 }
