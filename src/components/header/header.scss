@@ -38,17 +38,38 @@
     display: flex;
 }
 
+@media only screen and (max-width:'400px') {
+    .root{
+        margin: 0;
+        padding: 5px;
+        .header-text{
+            display: none;
+        }
+        .iconbox{
+            padding: 0 5px;
+        }
+        .caption{
+            display: none;
+        }
+    }  
+}
+
 @media only screen and (max-width:'600px') {
     .root{
-        flex-direction: column;
-        margin: auto;
-    }
-    .logo{
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-    .icons{
-        justify-content: center;
-        margin-top: 20px;
+        padding: 10px 20px;
+        position: fixed;
+        .logo{
+            padding: 0 5px;
+        }
+        .header-text{
+            display: none;
+        }
+        .iconbox{
+            padding: 0 10px;
+        }
+        .caption{
+            display: none;
+        }
+        z-index: 100;
     }
 }
