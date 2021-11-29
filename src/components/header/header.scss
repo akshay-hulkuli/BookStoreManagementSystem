@@ -38,6 +38,25 @@
     display: flex;
 }
 
+.profile{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    cursor: pointer;
+}
+
+.wishlist{
+    display: flex;
+    padding: 0 20px;
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.00938em;
+    color: #878787;
+    // margin: auto;
+}
+
 @media only screen and (max-width:'400px') {
     .root{
         margin: 0;
