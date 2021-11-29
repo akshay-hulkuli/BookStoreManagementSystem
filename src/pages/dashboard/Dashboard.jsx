@@ -207,7 +207,7 @@ export default function Dashboard() {
 
     return (
         <div>
-            <Header bookData={bookData} setBookData ={setBookData} backup={backup}/>
+            <Header mode="dashboard" bookData={bookData} setBookData ={setBookData} backup={backup}/>
             <div className="main">
                 <div className="main-header">
                     <div className="main-header-left"><span style={{fontSize:'24px'}}>Books</span><span style={{color:'#9D9D9D'}} id="items">({bookData.length} items)</span></div>
