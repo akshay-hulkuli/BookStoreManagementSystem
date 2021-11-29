@@ -16,7 +16,7 @@ export const addToCart = (data,getCart) => async dispatch => {
                 type: "ADDTOCART",
                 payload: data._id
             })
-            getCart();
+            // getCart();
     }
     catch(e){
         console.log(e);
@@ -24,18 +24,19 @@ export const addToCart = (data,getCart) => async dispatch => {
 
 }
 
-export const removeFromCart = (id,data) => async dispatch => {
+export const removeFromCart = (id,data,func) => async dispatch => {
     try{
         const payload = {
                       "cartItem_id": id
                  }
         const url = `bookstore_user/remove_cart_item/${id}`
         await bookService.deleteFromCart(url,payload);
-        console.log(localStorage.getItem('accessToken'))
+        console.log(data)
         dispatch( {
             type: "REMOVEFROMCART",
             payload: data
         })
+        func();
     }
     catch(e){
         console.log(e);
@@ -60,6 +61,18 @@ export const initialiseCart = () => async dispatch => {
         console.log(e);
     }
 
+}
+
+export const initialiseCartWithoutApi = (response) => dispatch => {
+    let ids = [];
+    response.map(cur => {
+        ids.push(cur.product_id._id)
+    })
+    console.log(ids)
+    dispatch( {
+        type: "INITIALISECART",
+        payload: ids
+    })
 }
 
 
