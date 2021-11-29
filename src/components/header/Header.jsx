@@ -9,12 +9,19 @@ import {useSelector} from 'react-redux';
 import { red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 
-export default function Header() {
+export default function Header(props) {
     const state  = useSelector(state => state);
     const navigate  = useNavigate();
-    React.useEffect(()=>{
+    // React.useEffect(()=>{
+        
+    // },[state])
 
-    },[state])
+    const searchOperation = (e) => {
+        let searchedArray = props.backup.filter((cur)=> 
+        (cur.bookName.toLowerCase().includes(e.target.value.toLowerCase())|| cur.author.toLowerCase().includes(e.target.value.toLowerCase())));
+        // console.log(searchedArray)
+        props.setBookData(searchedArray);
+    }
     return (
         <div class="root">
             <div className="logo">
@@ -25,7 +32,8 @@ export default function Header() {
                 placeholder="Search"
                 name="search"
                 startAdornment={<InputAdornment position="start"><IconButton sx={{color:'rgb(26, 26, 26)'}}><SearchIcon/></IconButton></InputAdornment>}
-                sx={{width:{md:'40%',sm:'100%'},backgroundColor:'rgb(239, 239, 239)', color:'rgb(26, 26, 26)', margin:'5px 10px', borderRadius:'8px', height:'40px' }}  
+                sx={{width:{md:'40%',sm:'100%'},backgroundColor:'rgb(239, 239, 239)', color:'rgb(26, 26, 26)', margin:'5px 10px', borderRadius:'8px', height:'40px' }}
+                onChange={(e)=>searchOperation(e)}  
             />
             <Box sx={{flexGrow:1}}/>
             <div className="icons">
