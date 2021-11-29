@@ -5,6 +5,7 @@ import {Routes,BrowserRouter as Router,Route} from 'react-router-dom';
 import Dashboard from './pages/dashboard/Dashboard';
 import CartPage from './pages/CartPage/CartPage';
 import ProtectedRoute from './protectedRoute/ProtectedRoute';
+import Wishlist from './pages/wishlist/Wishlist';
 
 function App() {
   return (
@@ -24,6 +25,13 @@ function App() {
             path="/cart" 
             element={<ProtectedRoute>
                       <CartPage/>
+                    </ProtectedRoute>}
+          />
+          <Route 
+            exact 
+            path="/wishlist" 
+            element={<ProtectedRoute>
+                      <Wishlist/>
                     </ProtectedRoute>}
           />
         </Routes>
