@@ -33,6 +33,7 @@ export default function CartPage() {
     const[openCollapse, setOpenCollapse] = React.useState(false);
     const[openCollapse2, setOpenCollapse2] = React.useState(false);
     const [cartData, setCartData] = React.useState([]);
+    const[backup,setBackup] = React.useState([]);
     const dispatch = useDispatch();
     // const cartState = useSelector(state => state);
     const [formData, setFormData] = React.useState({
@@ -125,6 +126,7 @@ export default function CartPage() {
             .then((res)=> {
                 setCartData(res.data.result);
                 console.log(res.data.result)
+                setBackup(res.data.result);
                 dispatch(initialiseCartWithoutApi(res.data.result))
             })
     }
@@ -172,7 +174,7 @@ export default function CartPage() {
 
     return (
         <div>
-            <Header/>
+            <Header mode="cart" bookData={cartData} setBookData ={setCartData} backup={backup}/>
             {/* section one my cart */}
             <div className="cart-main">
                 <div className="my-cart">
