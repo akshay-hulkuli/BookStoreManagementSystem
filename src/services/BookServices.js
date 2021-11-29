@@ -1,3 +1,4 @@
+import axios from "axios";
 import AxiosService from "./AxiosService";
 
 const axiosService = new AxiosService();
@@ -55,6 +56,14 @@ class BookService {
 
     placeOrder(url,data){
         return axiosService.PostMeth(url,data,config1);
+    }
+
+    getWishList(url){
+        return axiosService.GetMeth(url,config1);
+    }
+
+    removeWishlist(url,data){
+        return axiosService.DeleteMeth(url,data,config1);
     }
 }
 
