@@ -1,0 +1,45 @@
+.all-container{
+    min-height: 80.8vh;
+}
+
+.wishlist-main{
+    margin: 3% 15%;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #E4E4E4;
+    opacity: 1;
+    .wishlist-main-header{
+        background: #F5F5F5 0% 0% no-repeat padding-box;
+        border: 1px solid #E4E4E4;
+        border-radius: 1px;
+        padding: 20px 50px;
+        font-size: 24px;
+        font-family: 'Roboto';
+        letter-spacing: 0px;
+        color: #0A0102;
+    }
+    .wishlist-item{
+        display: flex;
+        justify-content: space-between;
+        padding: 30px;
+        border: 1px solid #E4E4E4;
+        .wishlist-item-left{
+            display: flex;
+            .bookname{
+                padding: 5px 10px 0 10px;
+                font: normal normal normal 24px Roboto;
+            }
+            .author{
+                padding: 0px 10px 10px 10px;
+                font: normal normal normal 18px Roboto;
+                color: #9D9D9D;
+            }
+            .price{
+                padding: 10px 10px 0 10px;
+                font: bold normal normal 20px Roboto;
+            }
+        }
+        .wishlist-item-right{
+            padding: 10px;
+        }
+    }
+}
