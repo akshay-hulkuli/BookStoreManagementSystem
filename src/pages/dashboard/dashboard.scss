@@ -73,11 +73,15 @@
     justify-content: space-between;
 }
 
-@media only screen and (max-width:'500px') {
+@media only screen and (max-width:'600px') {
     .main{
-      padding: 10% 5%;  
+        padding: 10% 5%;  
+        #items{
+            display: block;
+        }
+        .main-header{
+            margin-top: 50px;
+        }
     }
-    #items{
-        display: block;
-    }
+    
 }
