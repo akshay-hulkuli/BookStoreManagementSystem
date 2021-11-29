@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom';
 export default function Header() {
     const state  = useSelector(state => state);
     const navigate  = useNavigate();
+    React.useEffect(()=>{
+
+    },[state])
     return (
         <div class="root">
             <div className="logo">
