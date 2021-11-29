@@ -48,6 +48,10 @@ class BookService {
     deleteFromCart (url,data){
         return axiosService.DeleteMeth(url,data,config1);
     }
+
+    changeQuantity(url,data){
+        return axiosService.PutMeth(url,data,config1);
+    }
 }
 
 export default BookService;
