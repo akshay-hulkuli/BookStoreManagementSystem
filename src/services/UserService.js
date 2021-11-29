@@ -2,6 +2,11 @@ import AxiosService from "./AxiosService";
 
 const axiosService = new AxiosService();
 
+const config = {
+    headers:{
+        "token" : localStorage.getItem('accessToken'),
+    }
+}
 
 class UserService {
     Registration (url, data){
@@ -9,6 +14,9 @@ class UserService {
     }
     LogIn (url, data){
         return axiosService.PostMeth(url,data);
+    }
+    addCustomerAddress(url,data){
+        return axiosService.PutMeth(url,data,config);
     }
 }
 
