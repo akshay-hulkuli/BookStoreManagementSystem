@@ -19,6 +19,9 @@ class AxiosService {
             }
         })
     }
+    PutMeth(url,data,config=false){
+        return axios.put(baseUrl+url,data,config);
+    }
 }
 
 export default AxiosService;
