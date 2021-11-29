@@ -28,10 +28,10 @@ const theme = createTheme({
 const bookService = new BookService();
 
 const filterOptions = [
-    'sort by relevence',
-    'sort by price',
-    'sort by popularity',
-    'sort by rating'
+    'Price: Low to High',
+    'Price: High to Low',
+    'Title: A-Z',
+    'Title: Z-A'
 ]
 
 const CustomButton = styled(Button) (({theme}) => ({
@@ -61,6 +61,7 @@ const b = () => {
 export default function Dashboard() {
     const [sortingFilter, setSortingFilter] = React.useState(-1);
     const [bookData, setBookData] = React.useState([]);
+    const [backup,setBackup] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [wishlist, setWishlist] = React.useState([]);
     const booksPerPage = 8;
@@ -79,6 +80,7 @@ export default function Dashboard() {
             .then((res)=>{
                 console.log(res);
                 setBookData(res.data.result);
+                setBackup(res.data.result);
             })
             .catch((err)=>{
                 console.log(err);
@@ -124,6 +126,28 @@ export default function Dashboard() {
 
     const handleChange = (event) => {
         setSortingFilter(event.target.value);
+        switch(event.target.value){
+            case 1: var array = backup.sort((cur1, cur2)=> cur1.price - cur2.price);
+                    setBookData(array);
+                    break;
+            case 2: var array = backup.sort((cur1,cur2)=> cur2.price - cur1.price);
+                    setBookData(array);
+                    break;
+            case 3: var array = backup.sort((cur1,cur2)=> {
+                                    if(cur1.bookName < cur2.bookName) return -1;
+                                    else if(cur1.bookName > cur2.bookName) return 1;
+                                    else return 0
+                                });
+                    setBookData(array);
+                    break;
+            case 4: var array = backup.sort((cur1,cur2)=> {
+                                    if(cur2.bookName < cur1.bookName) return -1;
+                                    else if(cur2.bookName > cur1.bookName) return 1;
+                                    else return 0
+                                });
+                    setBookData(array);
+                    break;
+        }
     };
 
     const buttons = (book) => {
@@ -183,7 +207,7 @@ export default function Dashboard() {
 
     return (
         <div>
-            <Header/>
+            <Header bookData={bookData} setBookData ={setBookData} backup={backup}/>
             <div className="main">
                 <div className="main-header">
                     <div className="main-header-left"><span style={{fontSize:'24px'}}>Books</span><span style={{color:'#9D9D9D'}} id="items">({bookData.length} items)</span></div>
@@ -204,16 +228,16 @@ export default function Dashboard() {
                                             return <em>{filterOptions[sortingFilter-1]}</em>
                                     }}
                                 >
-                                    <MenuItem value={1}>sort by relevence</MenuItem>
-                                    <MenuItem value={2}>sort by price</MenuItem>
-                                    <MenuItem value={3}>sort by popularity</MenuItem>
-                                    <MenuItem value={4}>sort by rating</MenuItem>
+                                    <MenuItem value={1}>Price: Low to High</MenuItem>
+                                    <MenuItem value={2}>Price: High to Low</MenuItem>
+                                    <MenuItem value={3}>Title: A-Z</MenuItem>
+                                    <MenuItem value={4}>Title: Z-A</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
                     </div>
                 </div>
-                <Grid container spacing={4}>
+                <Grid container spacing={4} sx={{minHeight:'68vh'}}>
                     {currentBooks.map((book,index)=>(
                         <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
                             <div className='card'>
