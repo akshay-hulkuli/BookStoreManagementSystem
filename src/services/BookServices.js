@@ -52,6 +52,10 @@ class BookService {
     changeQuantity(url,data){
         return axiosService.PutMeth(url,data,config1);
     }
+
+    placeOrder(url,data){
+        return axiosService.PostMeth(url,data,config1);
+    }
 }
 
 export default BookService;
