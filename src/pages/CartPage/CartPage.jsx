@@ -341,7 +341,7 @@ export default function CartPage() {
                                                 <div className="my-book-author">{book.product_id.author} </div>
                                                 <div className="my-book-cost">Rs. {book.product_id.price*book.quantityToBuy}</div>
                                             </div>
-                                            <div>
+                                            <div className="empty">
                                                 <br></br><br></br><br></br><br></br>
                                             </div>
                                         </div> 
