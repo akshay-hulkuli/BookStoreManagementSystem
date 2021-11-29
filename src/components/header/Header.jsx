@@ -1,26 +1,51 @@
 import React from 'react'
 import icon from '../../assets/education.svg'
 import './header.scss'
-import { OutlinedInput, InputAdornment,IconButton, Box,Divider,Badge } from '@mui/material';
+import { OutlinedInput, InputAdornment,IconButton, Box,Divider,Badge,Popover,Typography,Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import {useSelector} from 'react-redux';
 import { red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 export default function Header(props) {
     const state  = useSelector(state => state);
     const navigate  = useNavigate();
-    // React.useEffect(()=>{
-        
-    // },[state])
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
 
     const searchOperation = (e) => {
-        let searchedArray = props.backup.filter((cur)=> 
-        (cur.bookName.toLowerCase().includes(e.target.value.toLowerCase())|| cur.author.toLowerCase().includes(e.target.value.toLowerCase())));
-        // console.log(searchedArray)
+        let searchedArray = new Array();
+        if(props.mode === 'dashboard')
+             searchedArray = props.backup.filter((cur)=> 
+            (cur.bookName.toLowerCase().includes(e.target.value.toLowerCase())|| cur.author.toLowerCase().includes(e.target.value.toLowerCase())));
+        if(props.mode === 'cart' || props.mode === 'wishlist')
+             searchedArray = props.backup.filter((cur)=> 
+            (cur.product_id.bookName.toLowerCase().includes(e.target.value.toLowerCase())|| cur.product_id.author.toLowerCase().includes(e.target.value.toLowerCase())));
         props.setBookData(searchedArray);
+    }
+
+    const logout = () => {
+        localStorage.removeItem('accessToken');
+        navigate('/');
+    }
+
+    const wishlist = () => {
+        navigate('/wishlist');
     }
     return (
         <div class="root">
@@ -38,10 +63,26 @@ export default function Header(props) {
             <Box sx={{flexGrow:1}}/>
             <div className="icons">
                 <Divider orientation="vertical" flexItem />
-                <div className="iconbox">
-                    <IconButton sx={{color:'white'}}><PersonOutlineOutlinedIcon/></IconButton>
-                    <div className="caption">account</div>
+                <div className="iconbox" onClick={handleClick}>
+                    <IconButton sx={{color:'white'}} ><PersonOutlineOutlinedIcon/></IconButton>
+                    <div className="caption">{localStorage.getItem('uname')}</div>
                 </div>
+                <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                    }}
+                >
+                    <div className="profile">
+                        <Typography sx={{ p: 1.5 }}>Hello <b>{localStorage.getItem('uname')}</b>,</Typography>
+                        <div className="wishlist" onClick={wishlist}><FavoriteBorderIcon/><span style={{padding:'2px'}}>My WishList</span></div>
+                        <Button variant="outlined" sx={{margin: '10px 20px'}} color="error" onClick={logout}>Logout</Button>
+                    </div>
+                </Popover>
                 <Divider orientation="vertical" flexItem />
                 <div className="iconbox" onClick={()=>navigate('/cart')}>
                     <IconButton sx={{color:'white'}}><Badge badgeContent={state.length} color="info"><ShoppingCartOutlinedIcon/></Badge></IconButton>
