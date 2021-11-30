@@ -6,6 +6,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import CartPage from './pages/CartPage/CartPage';
 import ProtectedRoute from './protectedRoute/ProtectedRoute';
 import Wishlist from './pages/wishlist/Wishlist';
+import OrderSuccess from './pages/orderSuccess/OrderSuccess';
 
 function App() {
   return (
@@ -34,7 +35,16 @@ function App() {
                       <Wishlist/>
                     </ProtectedRoute>}
           />
+          <Route 
+            exact 
+            path="/success" 
+            element={<ProtectedRoute>
+                      <OrderSuccess/>
+                    </ProtectedRoute>}
+          />
+
         </Routes>
+          
       </Router>
     </div>
   );
