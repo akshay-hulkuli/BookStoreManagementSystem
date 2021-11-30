@@ -3,7 +3,7 @@ import BookService from "../services/BookServices"
 
 const bookService = new BookService();
 
-export const addToCart = (data,getCart) => async dispatch => {
+export const addToCart = (data,getCart=null) => async dispatch => {
     
     try{
             const payload = {
@@ -16,7 +16,7 @@ export const addToCart = (data,getCart) => async dispatch => {
                 type: "ADDTOCART",
                 payload: data._id
             })
-            // getCart();
+            getCart();
     }
     catch(e){
         console.log(e);
