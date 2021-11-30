@@ -5,7 +5,10 @@ import Footer from '../../components/footer/Footer'
 import image from "../../assets/Image 23.png"
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BookService from '../../services/BookServices'
-import { IconButton } from '@mui/material'
+import { Button, IconButton } from '@mui/material'
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, initialiseCart } from '../../actions'
 
 const bookService = new BookService();
 
@@ -13,6 +16,8 @@ export default function Wishlist() {
 
     const [wishlist, setWishlist] = React.useState([]);
     const [backup, setBackup] = React.useState([]);
+
+    const dispatch = useDispatch();
 
     const getWishListData = () => {
         bookService.getWishList('bookstore_user/get_wishlist_items')
@@ -35,6 +40,16 @@ export default function Wishlist() {
                 getWishListData();
             })
     }
+
+    const callBackToRefreshRedux = () => {
+        dispatch(initialiseCart());
+    }
+
+    const addtocart = (book) => {
+        dispatch(addToCart(book.product_id, callBackToRefreshRedux));
+        deleteFromWishlist(book);
+    }
+
 
     React.useEffect(()=>{
         getWishListData();
@@ -59,7 +74,9 @@ export default function Wishlist() {
                                 </div>
                             </div>
                             <div className="wishlist-item-right">
-                               <IconButton onClick={()=> deleteFromWishlist(book)}> <DeleteForeverIcon sx={{color:'#9D9D9D'}} /> </IconButton>
+                                {/* <IconButton><AddShoppingCartIcon sx={{color:'#9D9D9D'}}/></IconButton> */}
+                                <Button variant="outlined" onClick={()=>addtocart(book)}>Move to cart</Button>
+                                <IconButton onClick={()=> deleteFromWishlist(book)}> <DeleteForeverIcon sx={{color:'#9D9D9D', padding: '0 20px'}} /> </IconButton>
                             </div>
                         </div>
                     ))}
