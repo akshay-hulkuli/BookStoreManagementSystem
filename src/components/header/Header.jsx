@@ -47,9 +47,13 @@ export default function Header(props) {
     const wishlist = () => {
         navigate('/wishlist');
     }
+
+    const gotohome = () => {
+        navigate('/dashboard');
+    }
     return (
         <div class="root">
-            <div className="logo">
+            <div className="logo" onClick={gotohome}>
                 <img src={icon} style={{paddingTop:'10px'}}/>
                 <div class="header-text">bookstore</div>
             </div>
