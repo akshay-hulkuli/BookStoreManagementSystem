@@ -12,6 +12,7 @@ import {useDispatch,useSelector} from 'react-redux';
 import { removeFromCart, initialiseCart, addToWishList, initializeWishList,initialiseCartWithoutApi } from '../../actions';
 import CartItem from '../../components/cartItem/CartItem'
 import UserService from '../../services/UserService'
+import { useNavigate } from 'react-router-dom'
 
 const bookService  = new BookService();
 const userService = new UserService();
@@ -36,6 +37,7 @@ export default function CartPage() {
     const[backup,setBackup] = React.useState([]);
     const dispatch = useDispatch();
     // const cartState = useSelector(state => state);
+    const navigate = useNavigate();
     const [formData, setFormData] = React.useState({
         "name":"",
         "nameError": false,
@@ -164,8 +166,12 @@ export default function CartPage() {
             "orders": orders
         }
         bookService.placeOrder('bookstore_user/add/order',data)
-            .then(()=>{
-                alert('your order is successfully placed');
+            .then(async()=>{
+                await cartData.map((order)=>{
+                     dispatch(removeFromCart(order._id,order.product_id._id));
+                })
+                navigate('/success');
+                dispatch(initialiseCart())
             })
             .catch((err)=>{
                 console.log(err);
