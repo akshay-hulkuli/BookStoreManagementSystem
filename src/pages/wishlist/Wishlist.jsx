@@ -56,32 +56,31 @@ export default function Wishlist() {
     },[])
 
     return (
-        <div>
+        <div className="wishlist-container">
             <Header mode="wishlist" bookData={wishlist} setBookData={setWishlist} backup={backup}/>
-            <div class="all-container">
-                <div className="wishlist-main">
-                    <div className="wishlist-main-header">
-                        My WishList ({wishlist.length})
-                    </div>
-                    {wishlist.map((book)=>(
-                        <div className="wishlist-item">
-                            <div className="wishlist-item-left">
-                                <img src={image}/>
-                                <div className="book-details">
-                                    <div className="bookname">{book.product_id.bookName}</div>
-                                    <div className="author">{book.product_id.author}</div>
-                                    <div className="price">Rs. {book.product_id.price}</div>
-                                </div>
-                            </div>
-                            <div className="wishlist-item-right">
-                                {/* <IconButton><AddShoppingCartIcon sx={{color:'#9D9D9D'}}/></IconButton> */}
-                                <Button variant="outlined" onClick={()=>addtocart(book)}>Move to cart</Button>
-                                <IconButton onClick={()=> deleteFromWishlist(book)}> <DeleteForeverIcon sx={{color:'#9D9D9D', padding: '0 20px'}} /> </IconButton>
+            <div className="wishlist-main">
+                <div className="wishlist-main-header">
+                    My WishList ({wishlist.length})
+                </div>
+                {wishlist.map((book)=>(
+                    <div className="wishlist-item">
+                        <div className="wishlist-item-left">
+                            <img src={image}/>
+                            <div className="book-details">
+                                <div className="bookname">{book.product_id.bookName}</div>
+                                <div className="author">{book.product_id.author}</div>
+                                <div className="price">Rs. {book.product_id.price}</div>
                             </div>
                         </div>
-                    ))}
-                </div>
+                        <div className="wishlist-item-right">
+                            {/* <IconButton><AddShoppingCartIcon sx={{color:'#9D9D9D'}}/></IconButton> */}
+                            <Button variant="text" color="secondary" onClick={()=>addtocart(book)}>Move to cart</Button>
+                            <IconButton onClick={()=> deleteFromWishlist(book)}> <DeleteForeverIcon sx={{color:'#9D9D9D', padding: '0 20px'}} /> </IconButton>
+                        </div>
+                    </div>
+                ))}
             </div>
+            
             <Footer/>
         </div>
     )
