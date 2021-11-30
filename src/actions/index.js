@@ -24,7 +24,7 @@ export const addToCart = (data,getCart=null) => async dispatch => {
 
 }
 
-export const removeFromCart = (id,data,func) => async dispatch => {
+export const removeFromCart = (id,data,func=null) => async dispatch => {
     try{
         const payload = {
                       "cartItem_id": id
@@ -36,7 +36,7 @@ export const removeFromCart = (id,data,func) => async dispatch => {
             type: "REMOVEFROMCART",
             payload: data
         })
-        func();
+        if(func!=null) func();
     }
     catch(e){
         console.log(e);
