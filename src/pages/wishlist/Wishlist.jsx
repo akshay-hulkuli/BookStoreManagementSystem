@@ -9,6 +9,7 @@ import { Button, IconButton } from '@mui/material'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, initialiseCart } from '../../actions'
+import bookloader from '../../assets/bookLoad.gif'
 
 const bookService = new BookService();
 
@@ -16,7 +17,7 @@ export default function Wishlist() {
 
     const [wishlist, setWishlist] = React.useState([]);
     const [backup, setBackup] = React.useState([]);
-
+    const [loading, setLoading] = React.useState(true);
     const dispatch = useDispatch();
 
     const getWishListData = () => {
@@ -53,35 +54,42 @@ export default function Wishlist() {
 
     React.useEffect(()=>{
         getWishListData();
+        setTimeout(()=>{
+            setLoading(false);
+        },1500);
     },[])
 
     return (
-        <div className="wishlist-container">
-            <Header mode="wishlist" bookData={wishlist} setBookData={setWishlist} backup={backup}/>
-            <div className="wishlist-main">
-                <div className="wishlist-main-header">
-                    My WishList ({wishlist.length})
-                </div>
-                {wishlist.map((book)=>(
-                    <div className="wishlist-item">
-                        <div className="wishlist-item-left">
-                            <img src={image}/>
-                            <div className="book-details">
-                                <div className="bookname">{book.product_id.bookName}</div>
-                                <div className="author">{book.product_id.author}</div>
-                                <div className="price">Rs. {book.product_id.price}</div>
+        <React.Fragment>
+            { loading ? <div className="preloader"><img src={bookloader}/></div> : 
+            <div className="wishlist-container">
+                <div>
+                    <Header mode="wishlist" bookData={wishlist} setBookData={setWishlist} backup={backup}/>
+                    <div className="wishlist-main">
+                        <div className="wishlist-main-header">
+                            My WishList ({wishlist.length})
+                        </div>
+                        {wishlist.map((book)=>(
+                            <div className="wishlist-item">
+                                <div className="wishlist-item-left">
+                                    <img src={image}/>
+                                    <div className="book-details">
+                                        <div className="bookname">{book.product_id.bookName}</div>
+                                        <div className="author">{book.product_id.author}</div>
+                                        <div className="price">Rs. {book.product_id.price}</div>
+                                    </div>
+                                </div>
+                                <div className="wishlist-item-right">
+                                    {/* <IconButton><AddShoppingCartIcon sx={{color:'#9D9D9D'}}/></IconButton> */}
+                                    <Button variant="text" color="secondary" onClick={()=>addtocart(book)}>Move to cart</Button>
+                                    <IconButton onClick={()=> deleteFromWishlist(book)}> <DeleteForeverIcon sx={{color:'#9D9D9D', padding: '0 20px'}} /> </IconButton>
+                                </div>
                             </div>
-                        </div>
-                        <div className="wishlist-item-right">
-                            {/* <IconButton><AddShoppingCartIcon sx={{color:'#9D9D9D'}}/></IconButton> */}
-                            <Button variant="text" color="secondary" onClick={()=>addtocart(book)}>Move to cart</Button>
-                            <IconButton onClick={()=> deleteFromWishlist(book)}> <DeleteForeverIcon sx={{color:'#9D9D9D', padding: '0 20px'}} /> </IconButton>
-                        </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            
-            <Footer/>
-        </div>
+                </div>
+                <Footer/>
+            </div> }
+        </React.Fragment>
     )
 }

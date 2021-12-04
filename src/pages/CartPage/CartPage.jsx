@@ -13,6 +13,7 @@ import { removeFromCart, initialiseCart, addToWishList, initializeWishList,initi
 import CartItem from '../../components/cartItem/CartItem'
 import UserService from '../../services/UserService'
 import { useNavigate } from 'react-router-dom'
+import bookloader from "../../assets/bookLoad.gif";
 
 const bookService  = new BookService();
 const userService = new UserService();
@@ -37,6 +38,7 @@ export default function CartPage() {
     const[backup,setBackup] = React.useState([]);
     const dispatch = useDispatch();
     // const cartState = useSelector(state => state);
+    const [loading, setLoading] = React.useState(true);
     const navigate = useNavigate();
     const [formData, setFormData] = React.useState({
         "name":"",
@@ -135,6 +137,9 @@ export default function CartPage() {
 
     React.useEffect(()=>{
         getCartData();
+        setTimeout(()=>{
+            setLoading(false);
+        },1500)
     },[])
 
 
@@ -179,193 +184,196 @@ export default function CartPage() {
     }
 
     return (
-        <div>
-            <Header mode="cart" bookData={cartData} setBookData ={setCartData} backup={backup}/>
-            {/* section one my cart */}
-            <div className="cart-main">
-                <div className="my-cart">
-                    <div className = "my-cart-left">
-                        <p className="my-cart-left-header" onClick={backToCart}>
-                            My Cart
-                        </p>
+        <React.Fragment>
+            {loading ? <div className="preloader"><img src={bookloader}/></div> : 
+            <div>
+                <Header mode="cart" bookData={cartData} setBookData ={setCartData} backup={backup}/>
+                {/* section one my cart */}
+                <div className="cart-main">
+                    <div className="my-cart">
+                        <div className = "my-cart-left">
+                            <p className="my-cart-left-header" onClick={backToCart}>
+                                My Cart
+                            </p>
 
-                        {/* this is the book iterate it */}
-                        {cartData.map((book=>(
-                            <CartItem book={book} getCartData={getCartData}/>
-                        )))}
-                       
-                    </div>
-                    <div className="my-cart-right">
-                        <Fade in={!openCollapse}>
-                            <CustomButton onClick={()=>{handleCollapse();getCartData()}}>Place order</CustomButton>
-                        </Fade>
-                    </div>
-                </div>
-                
-                {/* section 2 address */}
-                <div className="customer-details">
-                    <p className="customer-details-header" onClick={allowEdit}>
-                        customer details
-                    </p>  
-                    <Collapse in={openCollapse}>
-                        <div className="collapse-main">
-                            <div className="collapse-main-left">
-                                <div className="textfield-box">
-                                    <TextField
-                                        variant="outlined"
-                                        placeholder="Name"
-                                        sx={{margin: '5px'}}
-                                        fullWidth
-                                        size="medium"
-                                        disabled={openCollapse2}
-                                        name="name"
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                        error={formData.nameError}
-                                        helperText = {formData.nameError? "this is a required field":" "}
-                                    />
-                                    <TextField
-                                        variant="outlined"
-                                        placeholder="Phone number"
-                                        sx={{margin: '5px'}}
-                                        fullWidth
-                                        size="medium"
-                                        disabled={openCollapse2}
-                                        name="phone"
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                        error={formData.phoneError}
-                                        helperText = {formData.phoneError? "this is a required field":" "}
-                                    />
-                                </div>
-                                <div className="textfield-box">
-                                    <TextField
-                                        variant="outlined"
-                                        placeholder="Pincode"
-                                        sx={{margin: '5px'}}
-                                        fullWidth
-                                        size="medium"
-                                        disabled={openCollapse2}
-                                        name="pincode"
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                        error={formData.pincodeError}
-                                        helperText = {formData.pincodeError? "this is a required field":" "}
-                                    />
-                                    <TextField
-                                        variant="outlined"
-                                        placeholder="State"
-                                        sx={{margin: '5px'}}
-                                        fullWidth
-                                        size="medium"
-                                        disabled={openCollapse2}
-                                        name="state"
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                        error={formData.stateError}
-                                        helperText = {formData.stateError? "this is a required field":" "}
-                                    />
-                                </div>
-                                <div className="textfield-box">
-                                    <TextField
-                                        variant="outlined"
-                                        multiline
-                                        rows={3}
-                                        placeholder="Address"
-                                        sx={{margin: '5px'}}
-                                        fullWidth
-                                        disabled={openCollapse2}
-                                        name="address"
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                        error={formData.addressError}
-                                        helperText = {formData.addressError? "this is a required field":" "}
-                                    />
-                                </div>
-                                <div className="textfield-box">
-                                    <TextField
-                                        variant="outlined"
-                                        placeholder="City/Town"
-                                        sx={{margin: '5px'}}
-                                        fullWidth
-                                        size="medium"
-                                        disabled={openCollapse2}
-                                        name="city"
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                        error={formData.cityError}
-                                        helperText = {formData.cityError? "this is a required field":" "}
-                                    />
-                                    <TextField
-                                        variant="outlined"
-                                        placeholder="Landmark"
-                                        sx={{margin: '5px'}}
-                                        fullWidth
-                                        size="medium"
-                                        disabled={openCollapse2}
-                                        name="landmark"
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                        error={formData.landmarkError}
-                                        helperText = {formData.landmarkError? "this is a required field":" "}
-                                    />
-                                </div>
-                                <div style={{margin:'30px 10px'}}>
-                                    <span className="customer-details-radio-header">
-                                        type
-                                    </span>
-                                    <RadioGroup 
-                                        row aria-label="gender" 
-                                        name="row-radio-buttons-group" 
-                                        sx={{color:'#9D9D9D'}} 
-                                        onChange={(e)=>handleFormInputChange(e)}
-                                    >
-                                        <FormControlLabel name="type" value="Home" control={<Radio />} label="Home" sx={{paddingRight:'100px'}} disabled={openCollapse2}/>
-                                        <FormControlLabel name="type" value="Office" control={<Radio />} label="Work" sx={{paddingRight:'100px'}} disabled={openCollapse2} />
-                                        <FormControlLabel name="type" value="Other" control={<Radio />} label="Other"disabled={openCollapse2} />
-                                    </RadioGroup>
-                               
-                                </div>
-                            </div>
-                            <div className="collapse-main-right">
-                                <Fade in={!openCollapse2}>
-                                    <CustomButton onClick={submitForm}>continue</CustomButton>
-                                </Fade>
-                            </div>
+                            {/* this is the book iterate it */}
+                            {cartData.map((book=>(
+                                <CartItem book={book} getCartData={getCartData}/>
+                            )))}
+                        
                         </div>
-                    </Collapse>  
-                </div>
-                
-                {/* this is the third section */}
-                <div class="customer-details">
-                    <p className="customer-details-header">
-                        order summary
-                    </p>
-                    <Collapse in={openCollapse2}>
-                        <div className="order-summary">
-                            <div className = "my-cart-left">
-                                {/* this is the book iterate it */}
-                                {cartData.map((book)=>(
-                                    <div className="my-book">
-                                        <div className="my-book-left">
-                                            <img src = {image} className="my-book-left-image"/>
-                                        </div> 
-                                        <div className="my-book-right">
-                                            <div className="my-book-details">
-                                                <div className="my-book-name">{book.product_id.bookName}</div>
-                                                <div className="my-book-author">{book.product_id.author} </div>
-                                                <div className="my-book-cost">Rs. {book.product_id.price*book.quantityToBuy}</div>
-                                            </div>
-                                            <div className="empty">
-                                                <br></br><br></br><br></br><br></br>
-                                            </div>
-                                        </div> 
+                        <div className="my-cart-right">
+                            <Fade in={!openCollapse}>
+                                <CustomButton onClick={()=>{handleCollapse();getCartData()}}>Place order</CustomButton>
+                            </Fade>
+                        </div>
+                    </div>
+                    
+                    {/* section 2 address */}
+                    <div className="customer-details">
+                        <p className="customer-details-header" onClick={allowEdit}>
+                            customer details
+                        </p>  
+                        <Collapse in={openCollapse}>
+                            <div className="collapse-main">
+                                <div className="collapse-main-left">
+                                    <div className="textfield-box">
+                                        <TextField
+                                            variant="outlined"
+                                            placeholder="Name"
+                                            sx={{margin: '5px'}}
+                                            fullWidth
+                                            size="medium"
+                                            disabled={openCollapse2}
+                                            name="name"
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                            error={formData.nameError}
+                                            helperText = {formData.nameError? "this is a required field":" "}
+                                        />
+                                        <TextField
+                                            variant="outlined"
+                                            placeholder="Phone number"
+                                            sx={{margin: '5px'}}
+                                            fullWidth
+                                            size="medium"
+                                            disabled={openCollapse2}
+                                            name="phone"
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                            error={formData.phoneError}
+                                            helperText = {formData.phoneError? "this is a required field":" "}
+                                        />
                                     </div>
-                                ))}
+                                    <div className="textfield-box">
+                                        <TextField
+                                            variant="outlined"
+                                            placeholder="Pincode"
+                                            sx={{margin: '5px'}}
+                                            fullWidth
+                                            size="medium"
+                                            disabled={openCollapse2}
+                                            name="pincode"
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                            error={formData.pincodeError}
+                                            helperText = {formData.pincodeError? "this is a required field":" "}
+                                        />
+                                        <TextField
+                                            variant="outlined"
+                                            placeholder="State"
+                                            sx={{margin: '5px'}}
+                                            fullWidth
+                                            size="medium"
+                                            disabled={openCollapse2}
+                                            name="state"
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                            error={formData.stateError}
+                                            helperText = {formData.stateError? "this is a required field":" "}
+                                        />
+                                    </div>
+                                    <div className="textfield-box">
+                                        <TextField
+                                            variant="outlined"
+                                            multiline
+                                            rows={3}
+                                            placeholder="Address"
+                                            sx={{margin: '5px'}}
+                                            fullWidth
+                                            disabled={openCollapse2}
+                                            name="address"
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                            error={formData.addressError}
+                                            helperText = {formData.addressError? "this is a required field":" "}
+                                        />
+                                    </div>
+                                    <div className="textfield-box">
+                                        <TextField
+                                            variant="outlined"
+                                            placeholder="City/Town"
+                                            sx={{margin: '5px'}}
+                                            fullWidth
+                                            size="medium"
+                                            disabled={openCollapse2}
+                                            name="city"
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                            error={formData.cityError}
+                                            helperText = {formData.cityError? "this is a required field":" "}
+                                        />
+                                        <TextField
+                                            variant="outlined"
+                                            placeholder="Landmark"
+                                            sx={{margin: '5px'}}
+                                            fullWidth
+                                            size="medium"
+                                            disabled={openCollapse2}
+                                            name="landmark"
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                            error={formData.landmarkError}
+                                            helperText = {formData.landmarkError? "this is a required field":" "}
+                                        />
+                                    </div>
+                                    <div style={{margin:'30px 10px'}}>
+                                        <span className="customer-details-radio-header">
+                                            type
+                                        </span>
+                                        <RadioGroup 
+                                            row aria-label="gender" 
+                                            name="row-radio-buttons-group" 
+                                            sx={{color:'#9D9D9D'}} 
+                                            onChange={(e)=>handleFormInputChange(e)}
+                                        >
+                                            <FormControlLabel name="type" value="Home" control={<Radio />} label="Home" sx={{paddingRight:'100px'}} disabled={openCollapse2}/>
+                                            <FormControlLabel name="type" value="Office" control={<Radio />} label="Work" sx={{paddingRight:'100px'}} disabled={openCollapse2} />
+                                            <FormControlLabel name="type" value="Other" control={<Radio />} label="Other"disabled={openCollapse2} />
+                                        </RadioGroup>
                                 
+                                    </div>
+                                </div>
+                                <div className="collapse-main-right">
+                                    <Fade in={!openCollapse2}>
+                                        <CustomButton onClick={submitForm}>continue</CustomButton>
+                                    </Fade>
+                                </div>
                             </div>
-                            <div className="my-cart-right">
-                                <CustomButton onClick={placeOrder}>checkout</CustomButton>
+                        </Collapse>  
+                    </div>
+                    
+                    {/* this is the third section */}
+                    <div class="customer-details">
+                        <p className="customer-details-header">
+                            order summary
+                        </p>
+                        <Collapse in={openCollapse2}>
+                            <div className="order-summary">
+                                <div className = "my-cart-left">
+                                    {/* this is the book iterate it */}
+                                    {cartData.map((book)=>(
+                                        <div className="my-book">
+                                            <div className="my-book-left">
+                                                <img src = {image} className="my-book-left-image"/>
+                                            </div> 
+                                            <div className="my-book-right">
+                                                <div className="my-book-details">
+                                                    <div className="my-book-name">{book.product_id.bookName}</div>
+                                                    <div className="my-book-author">{book.product_id.author} </div>
+                                                    <div className="my-book-cost">Rs. {book.product_id.price*book.quantityToBuy}</div>
+                                                </div>
+                                                <div className="empty">
+                                                    <br></br><br></br><br></br><br></br>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    ))}
+                                    
+                                </div>
+                                <div className="my-cart-right">
+                                    <CustomButton onClick={placeOrder}>checkout</CustomButton>
+                                </div>
                             </div>
-                        </div>
-                    </Collapse>
-                </div>
+                        </Collapse>
+                    </div>
 
-            </div>
-            <Footer/>
-        </div>
+                </div>
+                <Footer/>
+            </div> }
+        </React.Fragment>
     )
 }
