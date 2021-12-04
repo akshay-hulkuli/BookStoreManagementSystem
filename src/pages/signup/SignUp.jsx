@@ -1,4 +1,4 @@
-import { Box, InputLabel, TextField,OutlinedInput,InputAdornment,IconButton, Button,FormHelperText } from '@mui/material'
+import { Box, InputLabel, TextField,OutlinedInput,InputAdornment,IconButton, Button,FormHelperText, Snackbar } from '@mui/material'
 import { styled } from '@mui/system';
 import React from 'react'
 import Visibility from '@mui/icons-material/Visibility';
@@ -28,6 +28,8 @@ const Root = styled('div') (({theme}) => ({
 }))
 
 export default function SignUp() {
+    const [openSnackbar, setOpenSnackBar] = React.useState(false);
+    const [message, setMessage] = React.useState("");
     const [inputData, setInputData] = React.useState({
         "name": "",
         "nameError": false,
@@ -44,6 +46,13 @@ export default function SignUp() {
     }
     const handleMouseDownPassword = (e) => {
         e.preventDefault();
+    }
+
+    const handleSnackbarClose = (event , reason) => {
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpenSnackBar(false);
     }
 
     const handleChange = (e) => {
@@ -81,6 +90,7 @@ export default function SignUp() {
     }
 
     const submitForm = () => {
+        setOpenSnackBar(true);
         if(!isValid()){
             console.log("successful validation");
             var data = {
@@ -93,9 +103,11 @@ export default function SignUp() {
                 .then((a)=>{
                     console.log("successful registration");
                     console.log(a);
+                    setMessage('Registration sucessful, verification mail sent')
                 })
                 .catch((err)=>{
                     console.log(err);
+                    setMessage('Registration failed')
                 })
         }
         else {
@@ -157,6 +169,14 @@ export default function SignUp() {
                     error= {inputData.mobileError}
                 />
                 <CustomButton variant="contained" fullWidth size="medium" onClick={submitForm}>SignUp</CustomButton>
+                <Snackbar open ={openSnackbar} autoHideDuration={4000} onClose={handleSnackbarClose}
+                    message={message}
+                    anchorOrigin = {{
+                        vertical: 'bottom',
+                        horizontal : 'right'
+                    }}
+                >
+                </Snackbar>
         </Root>
         
     )
