@@ -5,13 +5,13 @@ const axiosService = new AxiosService();
 
 const config = {
     headers:{
-        "x-acess-token" : localStorage.getItem('accessToken'),
+        "x-access-token" : localStorage.getItem('accessToken'),
     }
 }
 
 const config1 = {
     headers:{
-        "token" : localStorage.getItem('accessToken'),
+        "x-access-token" : localStorage.getItem('accessToken'),
     }
 }
 
@@ -23,7 +23,7 @@ class BookService {
     getCartItems (url,token){
         const config2 = {
             headers:{
-                "token" : token,
+                "x-access-token" : token,
             }
         }
         return axiosService.GetMeth(url,config2)
@@ -36,7 +36,7 @@ class BookService {
     getWishList(url,token){
         const config2 = {
             headers:{
-                "token" : token,
+                "x-access-token" : token,
             }
         }
         return axiosService.GetMeth(url,config2)
@@ -63,7 +63,7 @@ class BookService {
     }
 
     removeWishlist(url,data){
-        return axiosService.DeleteMeth(url,data,config1);
+        return axiosService.DeleteMeth(url,data);
     }
 }
 

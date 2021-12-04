@@ -4,7 +4,7 @@ const axiosService = new AxiosService();
 
 const config = {
     headers:{
-        "token" : localStorage.getItem('accessToken'),
+        "x-access-token" : localStorage.getItem('accessToken'),
     }
 }
 

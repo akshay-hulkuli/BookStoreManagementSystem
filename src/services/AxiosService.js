@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const baseUrl = "https://new-bookstore-backend.herokuapp.com/";
+const baseUrl = "https://bookstore.incubation.bridgelabz.com/";
+
+// https://bookstore.incubation.bridgelabz.com/bookstore_app/swagger/api/#/WishList/get_bookstore_user_get_wishlist_items
 
 class AxiosService {
     PostMeth(url, data, config=false){
@@ -12,7 +14,7 @@ class AxiosService {
     DeleteMeth(url,data,config=false){
         return axios.delete(baseUrl+url, {
             headers:{
-                "token": config.headers.token
+                "x-access-token": localStorage.getItem('accessToken')
             },
             data:{
                 "cartItem_id": data.cartItem_id
