@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField, Box, Button, Divider, InputAdornment, IconButton, OutlinedInput,FormHelperText } from '@mui/material';
+import { TextField, Box, Button, Divider, InputAdornment, IconButton, OutlinedInput,FormHelperText, Snackbar } from '@mui/material';
 import { styled } from '@mui/system';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -60,6 +60,8 @@ export default function Login() {
         "psw": "",
         "pswError": false
     });
+    const [openSnackbar, setOpenSnackBar] = React.useState(false);
+    const [message, setMessage] = React.useState("");
     const navigate = useNavigate();
     const setColor = (id) => {
         document.getElementById(id).style.color = 'red';
@@ -86,6 +88,13 @@ export default function Login() {
         // console.log(data)
     }
 
+    const handleSnackbarClose = (event , reason) => {
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpenSnackBar(false);
+    }
+
     const isValid = () => {
         var error = false;
         var data = inputData;
@@ -102,6 +111,7 @@ export default function Login() {
     }
 
     const submitForm = () => {
+        setOpenSnackBar(true);
         if(!isValid()){
             console.log("validation successfull");
             var data = {
@@ -111,15 +121,19 @@ export default function Login() {
             userService.Registration('bookstore_user/login',data)
                 .then((a)=>{
                     console.log("successfully logged in");
+                    setMessage('Login successful');
                     console.log(a);
                     localStorage.setItem('accessToken',a.data.result.accessToken);
-                    navigate('/dashboard');
+                    setTimeout(()=>{
+                        navigate('/dashboard');
+                    }, 1000)
                 })
                 .catch((err)=>{
                     console.log(err);
                 })
         }
         else {
+            setMessage('Login failed')
             console.log("validation failed");
         }
     }
@@ -168,6 +182,14 @@ export default function Login() {
                 <FaceBookButton variant="contained" fullWidth size="medium">Facebook</FaceBookButton>
                 <GoogleButton variant="contained" fullWidth size="medium">Google</GoogleButton>
             </Box>
+            <Snackbar open ={openSnackbar} autoHideDuration={4000} onClose={handleSnackbarClose}
+                message={message}
+                anchorOrigin = {{
+                    vertical: 'bottom',
+                    horizontal : 'right'
+                }}
+            >
+            </Snackbar>
         </Root>
     )
 }
