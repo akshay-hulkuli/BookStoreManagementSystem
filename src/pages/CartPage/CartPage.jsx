@@ -185,7 +185,7 @@ export default function CartPage() {
 
     return (
         <React.Fragment>
-            {loading ? <div className="preloader"><img src={bookloader}/></div> : 
+            {loading ? <div className="preloader"><img src={bookloader}/></div> : ""}
             <div>
                 <Header mode="cart" bookData={cartData} setBookData ={setCartData} backup={backup}/>
                 {/* section one my cart */}
@@ -373,7 +373,7 @@ export default function CartPage() {
 
                 </div>
                 <Footer/>
-            </div> }
+            </div> 
         </React.Fragment>
     )
 }

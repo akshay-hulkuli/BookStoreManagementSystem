@@ -61,7 +61,7 @@ export default function Wishlist() {
 
     return (
         <React.Fragment>
-            { loading ? <div className="preloader"><img src={bookloader}/></div> : 
+            { loading ? <div className="preloader"><img src={bookloader}/></div> : ""}
             <div className="wishlist-container">
                 <div>
                     <Header mode="wishlist" bookData={wishlist} setBookData={setWishlist} backup={backup}/>
@@ -89,7 +89,7 @@ export default function Wishlist() {
                     </div>
                 </div>
                 <Footer/>
-            </div> }
+            </div> 
         </React.Fragment>
     )
 }
