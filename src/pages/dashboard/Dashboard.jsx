@@ -3,7 +3,7 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import './dashboard.scss'
 import MenuItem from '@mui/material/MenuItem';
-import {FormControl,Box,IconButton, Grid, Button, Stack,PaginationItem, getCardUtilityClass} from '@mui/material';
+import {FormControl,Box,IconButton, Grid, Button, Stack,PaginationItem, Popper, Fade, Paper, Typography} from '@mui/material';
 import Select from '@mui/material/Select';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import BookService from '../../services/BookServices';
@@ -66,12 +66,24 @@ export default function Dashboard() {
     const [currentPage, setCurrentPage] = React.useState(1);
     const [wishlist, setWishlist] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
+    const [bookDetail, setBookDetail] = React.useState(null);
+    const [openPopper, setOpenPopper] = React.useState(false);
     const booksPerPage = 8;
     const dispatch = useDispatch();
     const cartData = useSelector(state => state);
     let indexOfLastTodo = currentPage * booksPerPage;
     let indexOfFirstTodo = indexOfLastTodo - booksPerPage;
     let currentBooks = bookData.slice(indexOfFirstTodo, indexOfLastTodo);
+
+    const handleHover = () => (event) => {
+        setBookDetail(event.currentTarget);
+        setOpenPopper((prev) => true);
+    };
+
+    const handleHover2 = () => () => {
+        setBookDetail(null);
+        setOpenPopper((prev) => false);
+    };
 
     async function getCart ()  {
        dispatch(initialiseCart())
@@ -211,8 +223,8 @@ export default function Dashboard() {
     }
 
     return (
-        <React.Fragment>
-            {loading ? <div className="preloader"><img src={bookloader}/></div> : 
+        <div class="dashboard">
+            {loading ? <div className="preloader"><img src={bookloader}/></div> : ""}
             <div>
                 <Header mode="dashboard" bookData={bookData} setBookData ={setBookData} backup={backup}/>
                 <div className="main">
@@ -247,7 +259,7 @@ export default function Dashboard() {
                     <Grid container spacing={4} sx={{minHeight:'68vh'}}>
                         {currentBooks.map((book,index)=>(
                             <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                                <div className='card'>
+                                <div className='card' onMouseEnter={handleHover()} onMouseLeave={handleHover2()}>
                                     <div className="card-media">
                                         <img src={image} className="image"/>
                                     </div>
@@ -280,7 +292,21 @@ export default function Dashboard() {
                     </ThemeProvider>
                 </div>
                 <Footer/>
-            </div>  }
-        </React.Fragment>
+                <Popper open={openPopper} anchorEl={bookDetail} placement={'right-start'} transition>
+                    {({ TransitionProps }) => (
+                    <Fade {...TransitionProps} timeout={350}>
+                        <Paper sx={{width:'30%'}}>
+                        <span className="book-detail">Book Detail</span>
+                        <Typography sx={{ p: 2,color: 'gray'}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In enim enim, interdum vel pulvinar sit amet, posuere a purus. Duis in lorem vel lacus aliquam placerat et sit amet dui. Integer ullamcorper tortor leo. Quisque a mollis nibh. In eros tellus, luctus et laoreet et, gravida eget risus. Nam molestie accumsan velit vitae molestie. Maecenas dapibus diam eu dui venenatis porttitor. Curabitur feugiat dolor et odio eleifend egestas ac vitae nisi. In pulvinar faucibus neque, at venenatis risus tincidunt non.
+
+                            Nulla tristique turpis ac erat maximus, nec sodales massa sagittis. Nullam ornare, ante id laoreet convallis, nulla velit molestie ante, pharetra aliquam ex orci commodo quam. Nunc vestibulum dapibus arcu nec volutpat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean mattis arcu at dui tempus pellentesque. Morbi vel nulla massa. In dignissim, ligula a sodales lacinia, arcu nulla elementum quam, vel sollicitudin ligula velit finibus odio. Donec eget laoreet eros, vel suscipit sapien. Nulla facilisi. Etiam ac tempor sem.
+
+                        </Typography>
+                        </Paper>
+                    </Fade>
+                    )}
+                </Popper>
+            </div>  
+        </div>
     )
 }
